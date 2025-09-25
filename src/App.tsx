@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
@@ -10,10 +10,22 @@ import Contact from './pages/Contact';
 import ProjectDetail from './pages/ProjectDetail';
 import CrystalVision from "./pages/CrystalVision";
 
+// ScrollToTop Component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <ErrorBoundary>
       <Router>
+        <ScrollToTop />
         <div className="bg-black min-h-screen text-white">
           <Navbar />
           <Routes>

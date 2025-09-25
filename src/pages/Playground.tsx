@@ -40,11 +40,8 @@ const staggerContainer: Variants = {
 };
 
 const Playground: React.FC = () => {
-  // default both to "everything"
   const [activeCategory, setActiveCategory] = useState<string>("everything");
   const [activeFilter, setActiveFilter] = useState<string>("everything");
-
-  // key to force remount/refresh of the grid (fixes the "click once then nothing" issue)
   const [gridKey, setGridKey] = useState<number>(0);
 
   const categories = [
@@ -62,7 +59,6 @@ const Playground: React.FC = () => {
     { id: "chaos", label: "Abstract Chaos", icon: ChaosIcon },
   ];
 
-  // === Projects ===
   const projects = [
     { id: 1, title: "ERROR_404.exe", subtitle: "When reality.exe stops working", category: "experimental", filter: ["glitch"], image: img1 },
     { id: 2, title: "NEON DREAMS", subtitle: "Typography Chaos", category: "unconventional", filter: ["type"], image: img2 },
@@ -72,11 +68,9 @@ const Playground: React.FC = () => {
     { id: 6, title: "WILD & FREE", subtitle: "Rebellious Letters", category: "weird", filter: ["type"], image: img6 },
     { id: 7, title: "Dreamscape Architecture", subtitle: "Building in the impossible", category: "experimental", filter: ["3d"], image: img7 },
     { id: 8, title: "Liquid Thoughts", subtitle: "Consciousness in motion", category: "unconventional", filter: ["chaos"], image: img8 },
-  ].map((p) => ({ ...p, filter: [...p.filter, "everything"] })); // ensure "everything" always matches
+  ].map((p) => ({ ...p, filter: [...p.filter, "everything"] }));
 
-  // Click handlers (they also bump gridKey to force a remount/refresh)
   const handleCategoryClick = (id: string) => {
-    // if clicking same category, still force a refresh (gridKey++) so animations / layout re-run
     if (id === activeCategory) {
       setGridKey((k) => k + 1);
       return;
@@ -86,7 +80,6 @@ const Playground: React.FC = () => {
   };
 
   const handleFilterClick = (id: string) => {
-    // if clicking same filter, force refresh so the grid re-animates
     if (id === activeFilter) {
       setGridKey((k) => k + 1);
       return;
@@ -95,7 +88,6 @@ const Playground: React.FC = () => {
     setGridKey((k) => k + 1);
   };
 
-  // === Filtering logic
   const filteredProjects = projects.filter((project) => {
     const matchesCategory = activeCategory === "everything" || project.category === activeCategory;
     const matchesFilter = activeFilter === "everything" || project.filter.includes(activeFilter);
@@ -103,147 +95,155 @@ const Playground: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen py-10 sm:py-12 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer}
-          className="text-center mb-10 sm:mb-14"
-        >
-          <motion.p variants={fadeUp} className="text-text-muted text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">
-            Playground
-          </motion.p>
+    <div className="flex flex-col min-h-screen">
+      {/* Main Content Wrapper */}
+      <main className="flex-grow py-10 sm:py-12 px-6 sm:px-8 md:px-12">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+            className="text-center mb-10 sm:mb-14"
+          >
+            <motion.p variants={fadeUp} className="text-text-muted text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">
+              Playground
+            </motion.p>
 
-          <motion.h1 variants={fadeUp} className="font-mono text-2xl sm:text-4xl md:text-6xl font-bold mb-3 sm:mb-5">
-            Welcome to the <br />
-            <span className="text-accent-green">Playground</span>
-          </motion.h1>
+            <motion.h1 variants={fadeUp} className="font-mono text-2xl sm:text-4xl md:text-6xl font-bold mb-3 sm:mb-5">
+              Welcome to the <br />
+              <span className="text-accent-green">Playground</span>
+            </motion.h1>
 
-          <motion.p variants={fadeUp} className="text-text-secondary text-sm sm:text-lg max-w-2xl mx-auto mb-5 sm:mb-7 px-2">
-            This is where I let my creativity run wild. Experimental art, weird concepts,{" "}
-            <span className="font-mono text-accent-green">digital chaos</span>, and everything that doesn't fit in a neat category.
-          </motion.p>
+            <motion.p
+              variants={fadeUp}
+              className="text-text-secondary text-sm sm:text-lg max-w-2xl mx-auto mb-5 sm:mb-7"
+            >
+              This is where I let my creativity run wild. Experimental art, weird concepts,{" "}
+              <span className="font-mono text-accent-green">digital chaos</span>, and everything that doesn't fit in a neat category.
+            </motion.p>
 
-          {/* Category Buttons */}
-          <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-            {categories.map((cat) => (
-              <motion.button
-                key={cat.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleCategoryClick(cat.id)}
-                aria-pressed={activeCategory === cat.id}
-                className={`group flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                  activeCategory === cat.id
-                    ? `${cat.color} text-white shadow-lg`
-                    : "bg-secondary text-text-secondary border border-gray-700 hover:border-accent hover:text-accent"
-                }`}
-              >
-                <img
-                  src={cat.icon}
-                  alt={cat.label}
-                  loading="lazy"
-                  decoding="async"
-                  className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 ${
-                    activeCategory === cat.id ? "filter invert brightness-0" : ""
+            {/* Category Buttons */}
+            <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+              {categories.map((cat) => (
+                <motion.button
+                  key={cat.id}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleCategoryClick(cat.id)}
+                  aria-pressed={activeCategory === cat.id}
+                  className={`group flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    activeCategory === cat.id
+                      ? `${cat.color} text-white shadow-lg`
+                      : "bg-secondary text-text-secondary border border-gray-700 hover:border-accent hover:text-accent"
                   }`}
-                />
-                {cat.label}
-              </motion.button>
-            ))}
+                >
+                  <img
+                    src={cat.icon}
+                    alt={cat.label}
+                    loading="lazy"
+                    decoding="async"
+                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 ${
+                      activeCategory === cat.id ? "filter invert brightness-0" : ""
+                    }`}
+                  />
+                  {cat.label}
+                </motion.button>
+              ))}
+            </motion.div>
+
+            {/* Filters */}
+            <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              {filters.map((f) => (
+                <motion.button
+                  key={f.id}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleFilterClick(f.id)}
+                  aria-pressed={activeFilter === f.id}
+                  className={`group flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-all ${
+                    activeFilter === f.id
+                      ? "bg-accent text-white shadow-md"
+                      : "bg-secondary/50 border border-gray-700 text-text-secondary hover:border-accent hover:text-accent"
+                  }`}
+                >
+                  <img
+                    src={f.icon}
+                    alt={f.label}
+                    loading="lazy"
+                    decoding="async"
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 ${
+                      activeFilter === f.id ? "filter invert brightness-0" : ""
+                    }`}
+                  />
+                  {f.label}
+                </motion.button>
+              ))}
+            </motion.div>
           </motion.div>
 
-          {/* Filters */}
-          <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 sm:gap-3">
-            {filters.map((f) => (
-              <motion.button
-                key={f.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleFilterClick(f.id)}
-                aria-pressed={activeFilter === f.id}
-                className={`group flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-all ${
-                  activeFilter === f.id
-                    ? "bg-accent text-white shadow-md"
-                    : "bg-secondary/50 border border-gray-700 text-text-secondary hover:border-accent hover:text-accent"
-                }`}
-              >
-                <img
-                  src={f.icon}
-                  alt={f.label}
-                  loading="lazy"
-                  decoding="async"
-                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 ${
-                    activeFilter === f.id ? "filter invert brightness-0" : ""
-                  }`}
-                />
-                {f.label}
-              </motion.button>
-            ))}
+          {/* Projects Grid */}
+          <motion.div
+            key={gridKey}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7"
+          >
+            {filteredProjects.length > 0 ? (
+              filteredProjects.map((project) => (
+                <motion.div
+                  key={project.id}
+                  variants={fadeUp}
+                  whileHover={{
+                    y: -4,
+                    scale: 1.02,
+                    boxShadow: "0px 6px 20px rgba(0,0,0,0.2)",
+                  }}
+                  transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                  className="rounded-2xl overflow-hidden bg-secondary/40 border border-gray-700/50 cursor-pointer"
+                >
+                  <Link to="/crystalvision">
+                    <div className="aspect-[4/3] w-full overflow-hidden">
+                      <motion.img
+                        src={project.image}
+                        alt={project.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover will-change-transform"
+                        whileHover={{ scale: 1.08 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      />
+                    </div>
+                    <div className="p-4 sm:p-5">
+                      <h3 className="font-mono text-sm sm:text-lg font-bold mb-1 sm:mb-2">
+                        {project.title}
+                      </h3>
+                      <p className="text-text-secondary text-xs sm:text-sm">{project.subtitle}</p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))
+            ) : (
+              <p className="text-center text-text-secondary col-span-full">No projects found.</p>
+            )}
           </motion.div>
-        </motion.div>
+        </div>
+      </main>
 
-        {/* Projects Grid (keyed by gridKey to force remount on clicks) */}
-        <motion.div
-          key={gridKey}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7"
-        >
-          {filteredProjects.length > 0 ? (
-            filteredProjects.map((project) => (
-              <motion.div
-                key={project.id}
-                variants={fadeUp}
-                whileHover={{
-                  y: -4,
-                  scale: 1.02,
-                  boxShadow: "0px 6px 20px rgba(0,0,0,0.2)",
-                }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                className="rounded-2xl overflow-hidden bg-secondary/40 border border-gray-700/50 cursor-pointer"
-              >
-                <Link to="/crystalvision">
-                  <div className="aspect-[4/3] w-full overflow-hidden">
-                    <motion.img
-                      src={project.image}
-                      alt={project.title}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover will-change-transform"
-                      whileHover={{ scale: 1.08 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                    />
-                  </div>
-                  <div className="p-4 sm:p-5">
-                    <h3 className="font-mono text-sm sm:text-lg font-bold mb-1 sm:mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-text-secondary text-xs sm:text-sm">{project.subtitle}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))
-          ) : (
-            <p className="text-center text-text-secondary col-span-full">No projects found.</p>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Footer */}
+      {/* ---------------- FOOTER ---------------- */}
       <motion.footer
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="text-center py-5 sm:py-8 mt-10 sm:mt-14 text-text-muted text-xs sm:text-sm border-t border-gray-800"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="py-10 px-6 sm:px-8 md:px-12 border-t border-gray-800"
       >
-        © Elara Vance 2025. All rights reserved.
+        <div className="max-w-6xl mx-auto text-center text-text-muted text-sm max-sm:text-xs">
+          © Elara Vance 2025. All rights reserved.
+        </div>
       </motion.footer>
     </div>
   );

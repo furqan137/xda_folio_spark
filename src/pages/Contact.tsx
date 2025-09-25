@@ -59,7 +59,7 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 md:px-8 bg-background text-white">
+    <div className="min-h-screen py-12 px-6 sm:px-8 md:px-12 bg-background text-white">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -107,97 +107,97 @@ const Contact: React.FC = () => {
               </h2>
             </div>
 
-       <form className="space-y-4 sm:space-y-6">
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-    <div>
-      <label className="block text-sm font-medium text-text-secondary mb-2">
-        Your Name
-      </label>
-      <input
-        type="text"
-        name="name"
-        value={formData.name}
-        onChange={handleInputChange}
-        placeholder="John Doe"
-        className="w-full bg-primary/50 border border-gray-600 rounded-lg 
+            <form className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-2">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="John Doe"
+                    className="w-full bg-primary/50 border border-gray-600 rounded-lg 
                    px-3 sm:px-4 py-2.5 sm:py-3 
                    focus:border-purple-500 focus:ring-1 focus:ring-purple-500 
                    hover:border-purple-400
                    transition-colors text-sm sm:text-base"
-      />
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-text-secondary mb-2">
-        Email Address
-      </label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        placeholder="john@example.com"
-        className="w-full bg-primary/50 border border-gray-600 rounded-lg 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="john@example.com"
+                    className="w-full bg-primary/50 border border-gray-600 rounded-lg 
                    px-3 sm:px-4 py-2.5 sm:py-3 
                    focus:border-purple-500 focus:ring-1 focus:ring-purple-500 
                    hover:border-purple-400
                    transition-colors text-sm sm:text-base"
-      />
-    </div>
-  </div>
+                  />
+                </div>
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium text-text-secondary mb-2">
-      Subject
-    </label>
-    <input
-      type="text"
-      name="subject"
-      value={formData.subject}
-      onChange={handleInputChange}
-      placeholder="Project Collaboration"
-      className="w-full bg-primary/50 border border-gray-600 rounded-lg 
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-2">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  placeholder="Project Collaboration"
+                  className="w-full bg-primary/50 border border-gray-600 rounded-lg 
                  px-3 sm:px-4 py-2.5 sm:py-3 
                  focus:border-purple-500 focus:ring-1 focus:ring-purple-500 
                  hover:border-purple-400
                  transition-colors text-sm sm:text-base"
-    />
-  </div>
+                />
+              </div>
 
-  <div>
-    <label className="block text-sm font-medium text-text-secondary mb-2">
-      Message
-    </label>
-    <textarea
-      name="message"
-      value={formData.message}
-      onChange={handleInputChange}
-      rows={5}
-      placeholder="Tell me about your project or just say hello..."
-      className="w-full bg-primary/50 border border-gray-600 rounded-lg 
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-2">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows={5}
+                  placeholder="Tell me about your project or just say hello..."
+                  className="w-full bg-primary/50 border border-gray-600 rounded-lg 
                  px-3 sm:px-4 py-2.5 sm:py-3 
                  focus:border-purple-500 focus:ring-1 focus:ring-purple-500 
                  hover:border-purple-400
                  transition-colors resize-none text-sm sm:text-base"
-    ></textarea>
-  </div>
+                ></textarea>
+              </div>
 
-  {/* Optimized Button */}
-  <button
-    type="submit"
-    className="group bg-accent hover:bg-accent-light px-6 sm:px-8 py-3 sm:py-4 
+              {/* Optimized Button */}
+              <button
+                type="submit"
+                className="group bg-accent hover:bg-accent-light px-6 sm:px-8 py-3 sm:py-4 
                rounded-xl font-medium transition-colors flex items-center gap-2 
                text-white text-sm sm:text-base shadow-md"
-  >
-    <img
-      src={SendIcon}
-      alt="Send"
-      loading="lazy"
-      decoding="async"
-      className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1"
-    />
-    Send Message
-  </button>
-</form>
+              >
+                <img
+                  src={SendIcon}
+                  alt="Send"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1"
+                />
+                Send Message
+              </button>
+            </form>
           </motion.div>
 
           {/* Contact Info */}
@@ -319,10 +319,18 @@ const Contact: React.FC = () => {
         </section>
       </div>
 
-      {/* Footer */}
-      <footer className="text-center py-6 sm:py-8 mt-12 sm:mt-16 text-text-muted text-xs sm:text-sm border-t border-gray-800">
-        © Elara Vance 2025. All rights reserved.
-      </footer>
+        {/* ---------------- FOOTER ---------------- */}
+      <motion.footer
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="py-10 px-6 sm:px-8 md:px-12 border-t border-gray-800"  // 🔥 Increased padding to match sections
+      >
+        <div className="max-w-6xl mx-auto text-center text-text-muted text-sm max-sm:text-xs">
+          © Elara Vance 2025. All rights reserved.
+        </div>
+      </motion.footer>
     </div>
   );
 };

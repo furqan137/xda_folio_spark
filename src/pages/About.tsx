@@ -20,7 +20,7 @@ const fadeInUp: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" }, // shorter for smoother mobile
+    transition: { duration: 0.5, ease: "easeOut" },
   },
 };
 
@@ -82,14 +82,14 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 md:px-8 bg-background">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 py-12">
         {/* ------------------ Header ------------------ */}
         <motion.div
           variants={fadeInUp}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }} // ✅ smaller trigger threshold for mobile
+          viewport={{ once: true, amount: 0.15 }}
           className="text-center mb-12 md:mb-16"
         >
           <p className="text-text-muted text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">
@@ -104,7 +104,6 @@ const About = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            {/* ✅ Full button hover trigger */}
             <motion.button
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
@@ -165,7 +164,7 @@ const About = () => {
                 <motion.img
                   src={ProfileImage}
                   alt="Aria Lane"
-                  loading="lazy" // ✅ lazy load
+                  loading="lazy"
                   className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
@@ -238,7 +237,7 @@ const About = () => {
               <motion.img
                 src={CreativeImage}
                 alt="Creative workspace"
-                loading="lazy" // ✅ lazy load
+                loading="lazy"
                 className="w-full h-56 sm:h-72 md:h-80 object-cover rounded-xl"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -281,7 +280,7 @@ const About = () => {
                     <img
                       src={value.icon}
                       alt={value.title}
-                      loading="lazy" // ✅ lazy load
+                      loading="lazy"
                       className="w-5 h-5 sm:w-6 sm:h-6"
                     />
                   </motion.div>
@@ -348,10 +347,18 @@ const About = () => {
         </motion.section>
       </div>
 
-      {/* ------------------ Footer ------------------ */}
-      <footer className="text-center py-6 sm:py-8 mt-12 md:mt-16 text-text-muted text-xs sm:text-sm border-t border-gray-800">
-        © Elara Vance 2025. All rights reserved.
-      </footer>
+      {/* ---------------- FOOTER ---------------- */}
+      <motion.footer
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="py-10 px-6 sm:px-8 md:px-12 border-t border-gray-800"  // 🔥 Increased padding to match sections
+      >
+        <div className="max-w-6xl mx-auto text-center text-text-muted text-sm max-sm:text-xs">
+          © Elara Vance 2025. All rights reserved.
+        </div>
+      </motion.footer>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { easeOut, easeInOut } from "framer-motion"; // ✅ easing functions
+import { easeOut, easeInOut } from "framer-motion";
 
 // Import custom icons
 import DribbbleIcon from "../icons/dribble.png";
@@ -40,9 +40,19 @@ const SocialLinks = () => {
       scale: 1.12,
       y: -4,
       boxShadow: "0px 6px 18px rgba(0, 200, 255, 0.25)",
-      transition: { duration: 0.15, ease: easeOut }, // ✅ snappy raise
+      transition: { duration: 0.15, ease: easeOut },
     },
     tap: { scale: 0.92 },
+  };
+
+  // ✅ Icon will only animate when parent (button) is hovered
+  const iconVariants = {
+    initial: { scale: 1, rotate: 0 },
+    hover: {
+      scale: 1.18,
+      rotate: 6,
+      transition: { delay: 0.15, duration: 0.4, ease: easeInOut },
+    },
   };
 
   return (
@@ -68,13 +78,13 @@ const SocialLinks = () => {
                      border border-gray-700 hover:border-accent
                      transition-all duration-300 group"
         >
-          {/* ✅ icon zooms in slightly after parent raise */}
+          {/* ✅ icon reacts only after parent hover */}
           <motion.img
             src={link.icon}
             alt={link.label}
             className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
-            whileHover={{ scale: 1.18, rotate: 6 }}
-            transition={{ delay: 0.15, duration: 0.4, ease: easeInOut }} // ✅ delay for smoother zoom
+            variants={iconVariants}
+            initial="initial"
           />
         </motion.a>
       ))}

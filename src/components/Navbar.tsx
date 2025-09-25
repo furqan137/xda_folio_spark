@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../images/logo.png";
@@ -6,6 +6,20 @@ import logo from "../images/logo.png";
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isShrunk, setIsShrunk] = useState(false);
+
+  // Detect scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsShrunk(true);
+      } else {
+        setIsShrunk(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -15,19 +29,29 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="w-full bg-background z-50 sticky top-0 shadow-md">
+    <header
+      className={`w-full bg-background z-50 sticky top-0 shadow-md transition-all duration-300 ${
+        isShrunk ? "py-1" : "py-2 md:py-3"
+      }`}
+    >
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-4 md:px-5 py-2 md:py-3">
+      <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 md:px-10 transition-all duration-300">
         {/* Logo */}
         <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0, duration: 0.4 }}
           whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 200 }}
         >
           <Link to="/" className="flex items-center space-x-2">
             <motion.img
               src={logo}
               alt="Logo"
-              className="w-8 h-8 md:w-10 md:h-10 object-contain rounded-full ring-2 ring-accent/30"
+              className={`object-contain rounded-full ring-2 ring-accent/30 transition-all duration-300 ${
+                isShrunk
+                  ? "w-10 h-10 md:w-12 md:h-12"
+                  : "w-12 h-12 md:w-14 md:h-14"
+              }`}
               whileHover={{ rotate: 6 }}
               transition={{ duration: 0.3 }}
             />
@@ -41,7 +65,7 @@ const Navbar = () => {
               key={item.name}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.1 + 0.2, duration: 0.4 }}
             >
               <Link
                 to={item.path}
@@ -59,10 +83,19 @@ const Navbar = () => {
         </div>
 
         {/* Desktop CTA */}
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: navItems.length * 0.1 + 0.4,
+            duration: 0.4,
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <Link
             to="/contact"
-            className="hidden md:block bg-accent text-white px-5 py-1.5 
+            className="hidden md:block bg-accent text-white px-6 py-2 
                        rounded-full text-sm font-medium shadow-md
                        hover:bg-accent/80 transition-all duration-200"
           >
@@ -127,7 +160,10 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navItems.length * 0.15 }}
+              transition={{
+                delay: navItems.length * 0.15 + 0.2,
+                duration: 0.4,
+              }}
             >
               <Link
                 to="/contact"
