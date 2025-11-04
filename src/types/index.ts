@@ -12,11 +12,7 @@ export interface Project {
 export interface Skill {
   name: string;
   icon: string;
-<<<<<<< HEAD
   category?: "Design" | "Video" | "Illustration" | "UI/UX";
-=======
-  level?: number;
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 }
 
 export interface SocialLink {

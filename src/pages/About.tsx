@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { motion, Variants } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -18,23 +17,6 @@ import LearningIcon from "../icons/about/learning.svg";
 // Local images
 import CreativeImage from "../images/creative.png";
 import ProfileImage from "../images/profile.svg";
-=======
-import React from "react";
-import { motion, Variants } from "framer-motion";
-
-// Local icons
-import InspirationIcon from "../icons/about/inspire.png";
-import GrowthIcon from "../icons/about/growth.png";
-import CommunityIcon from "../icons/about/community.png";
-import ExperienceIcon from "../icons/about/experience.png";
-import SatisfactionIcon from "../icons/about/satisfaction.png";
-import CoffeeIcon from "../icons/about/coffee.png";
-import LearningIcon from "../icons/about/learning.png";
-
-// Local images
-import CreativeImage from "../images/creative.png";
-import ProfileImage from "../images/profile.png";
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 
 // ------------------ Variants ------------------
 const fadeInUp: Variants = {
@@ -42,13 +24,8 @@ const fadeInUp: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-<<<<<<< HEAD
     transition: { duration: 0.5, ease: "easeOut" }
   }
-=======
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 };
 
 const fadeInLeft: Variants = {
@@ -56,13 +33,8 @@ const fadeInLeft: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-<<<<<<< HEAD
     transition: { duration: 0.5, ease: "easeOut" }
   }
-=======
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 };
 
 const fadeInRight: Variants = {
@@ -70,13 +42,8 @@ const fadeInRight: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-<<<<<<< HEAD
     transition: { duration: 0.5, ease: "easeOut" }
   }
-=======
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 };
 
 const scaleIn: Variants = {
@@ -84,13 +51,8 @@ const scaleIn: Variants = {
   visible: {
     opacity: 1,
     scale: 1,
-<<<<<<< HEAD
     transition: { duration: 0.4, ease: "easeOut" }
   }
-=======
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
 };
 
 // ------------------ Component ------------------
@@ -100,29 +62,20 @@ const About = () => {
       icon: InspirationIcon,
       title: "Inspiration Sources",
       description:
-<<<<<<< HEAD
         "Most of what I make starts from curiosity — learning, failing, fixing, and redoing until something finally clicks. Every piece teaches me something new.",
       color: "bg-indigo-700/25" // soft blue
-=======
-        "I find inspiration everywhere—from the interplay of light and shadow in Parisian cafés to the geometric patterns in Islamic architecture.",
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
     },
     {
       icon: GrowthIcon,
       title: "Personal Growth",
       description:
-<<<<<<< HEAD
         "I’ve never had formal training or big clients — just a long trail of experiments, redesigns, and personal projects that pushed me to get better.",
       color: "bg-indigo-600/25" // purple for creativity
-=======
-        "Each project teaches me something new. I believe in continuous learning and pushing the boundaries of my creative comfort zone.",
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
     },
     {
       icon: CommunityIcon,
       title: "Community",
       description:
-<<<<<<< HEAD
         "Everything I've learned came from others sharing their work. I try to give that back — whether through collaborations, remakes, or helping others improve.",
       color: "bg-pink-700/25" // warm magenta tone
     }
@@ -155,22 +108,6 @@ const About = () => {
         />
       </Helmet>
       <div className="max-w-6xl mx-auto px-7 sm:px-7 md:px-8 pt-36 sm:pt-48 md:pt-56 pb-12">
-=======
-        "I'm passionate about mentoring emerging artists and contributing to the vibrant creative community that shaped me.",
-    },
-  ];
-
-  const stats = [
-    { value: "8+", label: "Years of Experience", icon: ExperienceIcon },
-    { value: "99%", label: "Client Satisfaction", icon: SatisfactionIcon },
-    { value: "200+", label: "Cups of Coffee", icon: CoffeeIcon },
-    { value: "24/7", label: "Learning Mode", icon: LearningIcon },
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 md:px-12 py-12">
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
         {/* ------------------ Header ------------------ */}
         <motion.div
           variants={fadeInUp}
@@ -179,7 +116,6 @@ const About = () => {
           viewport={{ once: true, amount: 0.15 }}
           className="text-center mb-12 md:mb-16"
         >
-<<<<<<< HEAD
           <p className="text-text-muted text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">About</p>
           <h1 className="font-mono text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6">Design that Inspires</h1>
           <p className="text-text-secondary text-base sm:text-lg max-w-2xl mx-auto mb-6 sm:mb-8">
@@ -207,41 +143,6 @@ const About = () => {
             >
               Get In Touch
             </Link>
-=======
-          <p className="text-text-muted text-xs sm:text-sm uppercase tracking-wider mb-3 sm:mb-4">
-            About Us
-          </p>
-          <h1 className="font-mono text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6">
-            Design that Inspires
-          </h1>
-          <p className="text-text-secondary text-base sm:text-lg max-w-2xl mx-auto mb-6 sm:mb-8">
-            A digital artist crafting unique visual identities and immersive
-            experiences that connect and resonate.
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            <motion.button
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center bg-secondary border border-gray-600 px-5 py-2.5 sm:px-6 sm:py-3 
-                 rounded-lg font-medium text-sm sm:text-base 
-                 hover:bg-accent hover:text-white 
-                 transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              View My Work
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center border border-gray-600 px-5 py-2.5 sm:px-6 sm:py-3 
-                 rounded-lg font-medium text-sm sm:text-base 
-                 hover:border-accent hover:text-accent 
-                 transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              Get In Touch
-            </motion.button>
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
           </div>
         </motion.div>
 
@@ -254,7 +155,6 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.15 }}
             >
-<<<<<<< HEAD
               <h2 className="font-mono text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">A blend of art & logic.</h2>
               <p className="text-text-secondary mb-4 sm:mb-6 text-sm sm:text-base">
                 Good design isn’t just what you see — it’s how it feels and functions. Every project starts with intent,
@@ -262,21 +162,6 @@ const About = () => {
               </p>
               <p className="text-text-secondary text-sm sm:text-base">
                 From motion graphics to intuitive interfaces, I focus on work that’s both practical and expressive.
-=======
-              <h2 className="font-mono text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
-                A blend of art & logic.
-              </h2>
-              <p className="text-text-secondary mb-4 sm:mb-6 text-sm sm:text-base">
-                I believe great design is not just about aesthetics, but about
-                creating a feeling, telling a story, and solving a problem. My
-                work lives at the intersection of creative exploration and
-                strategic thinking.
-              </p>
-              <p className="text-text-secondary text-sm sm:text-base">
-                From vibrant illustrations to clean, intuitive user interfaces,
-                my goal is to build things that are not only beautiful but also
-                meaningful and user-centric.
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
               </p>
             </motion.div>
 
@@ -285,11 +170,7 @@ const About = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.15 }}
-<<<<<<< HEAD
               className="bg-secondary/30 p-6 sm:p-8 rounded-xl border border-gray-700/50 max-w-sm mx-auto"
-=======
-              className="bg-secondary/30 p-6 sm:p-8 rounded-xl border border-gray-700/50"
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
             >
               <div className="flex items-center gap-3 sm:gap-4 mb-4">
                 <motion.img
@@ -301,7 +182,6 @@ const About = () => {
                   transition={{ duration: 0.3 }}
                 />
                 <div>
-<<<<<<< HEAD
                   <h3 className="font-semibold text-sm sm:text-base">Nitinfiny</h3>
                   <p className="text-text-muted text-xs sm:text-sm">Visual Artist & Designer</p>
                 </div>
@@ -309,20 +189,6 @@ const About = () => {
               <p className="text-text-secondary text-xs sm:text-sm">
                 Focused on motion, identity, and UI/UX. I design visuals that work — clear, consistent, and crafted with
                 intent.
-=======
-                  <h3 className="font-semibold text-sm sm:text-base">
-                    Aria Lane
-                  </h3>
-                  <p className="text-text-muted text-xs sm:text-sm">
-                    Visual Artist & Designer
-                  </p>
-                </div>
-              </div>
-              <p className="text-text-secondary text-xs sm:text-sm">
-                Specializing in digital illustration, branding, and UI/UX.
-                Passionate about bringing ideas to life with clarity and
-                creativity.
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
               </p>
             </motion.div>
           </div>
@@ -337,17 +203,8 @@ const About = () => {
             viewport={{ once: true, amount: 0.15 }}
             className="text-center mb-8 md:mb-12"
           >
-<<<<<<< HEAD
             <h2 className="font-mono text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">My Creative Journey</h2>
             <p className="text-text-secondary text-sm sm:text-base">From early experiments to digital design systems</p>
-=======
-            <h2 className="font-mono text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">
-              My Creative Journey
-            </h2>
-            <p className="text-text-secondary text-sm sm:text-base">
-              From traditional sketches to digital masterpieces
-            </p>
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -359,7 +216,6 @@ const About = () => {
               className="space-y-4 sm:space-y-6"
             >
               <p className="text-text-secondary text-sm sm:text-base">
-<<<<<<< HEAD
                 I started with simple drawings and motion tests — learning how light, color, and movement shape
                 attention. Over time, that curiosity turned into a skillset focused on digital design, motion, and
                 interface clarity.
@@ -367,19 +223,6 @@ const About = () => {
               <p className="text-text-secondary text-sm sm:text-base">
                 Now, I combine visual design with structured problem-solving — creating work that’s clean, deliberate,
                 and built to connect.
-=======
-                Growing up in the artistic heart of Paris, I was immersed in a
-                world where creativity wasn’t just encouraged—it was essential.
-              </p>
-              <p className="text-text-secondary text-sm sm:text-base">
-                What began as childhood fascination with colors and forms has
-                evolved into a sophisticated understanding of visual
-                communication.
-              </p>
-              <p className="text-text-secondary text-sm sm:text-base">
-                Today, I blend traditional artistic principles with digital
-                techniques, creating work that resonates.
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
               </p>
             </motion.div>
 
@@ -411,7 +254,6 @@ const About = () => {
             viewport={{ once: true, amount: 0.15 }}
             className="text-center mb-8 md:mb-12"
           >
-<<<<<<< HEAD
             <h2 className="font-mono text-2xl sm:text-3xl font-bold">Beyond the Canvas</h2>
           </motion.div>
 
@@ -503,75 +345,10 @@ const About = () => {
                   </motion.div>
                 ))}
               </div>
-=======
-            <h2 className="font-mono text-2xl sm:text-3xl font-bold">
-              Beyond the Canvas
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-            {/* Left Values */}
-            <div className="space-y-6 sm:space-y-8">
-              {values.map((value, index) => (
-                <motion.div
-                  key={value.title}
-                  variants={fadeInUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex gap-3 sm:gap-4 items-start"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/20 rounded-lg flex items-center justify-center"
-                  >
-                    <img
-                      src={value.icon}
-                      alt={value.title}
-                      loading="lazy"
-                      className="w-5 h-5 sm:w-6 sm:h-6"
-                    />
-                  </motion.div>
-                  <div>
-                    <h3 className="font-semibold text-sm sm:text-base mb-1">
-                      {value.title}
-                    </h3>
-                    <p className="text-text-secondary text-xs sm:text-sm">
-                      {value.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Right Stats */}
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  variants={scaleIn}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.03 }}
-                  className="bg-secondary/30 border border-gray-700/50 rounded-xl p-4 sm:p-6 text-center"
-                >
-                  <div className="font-mono text-2xl sm:text-3xl font-bold text-accent mb-1 sm:mb-2">
-                    {stat.value}
-                  </div>
-                  <p className="text-text-secondary text-xs sm:text-sm">
-                    {stat.label}
-                  </p>
-                </motion.div>
-              ))}
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
             </div>
           </div>
         </section>
 
-<<<<<<< HEAD
         {/* ------------------ CTA Section ------------------ */}
         <motion.section
           variants={fadeInUp}
@@ -610,51 +387,6 @@ const About = () => {
       {/* ---------------- FOOTER ---------------- */}
       <BackToTop />
       <Footer />
-=======
- {/* ------------------ CTA Section ------------------ */}
-<motion.section
-  variants={fadeInUp}
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, amount: 0.15 }}
-  className="text-center py-14 sm:py-20 px-6 sm:px-10 bg-secondary/20 rounded-2xl border border-gray-700/50"
->
-  <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold mb-5 sm:mb-6 leading-snug">
-    It's your time to shine.
-  </h2>
-  
-  <p className="text-text-secondary mb-8 sm:mb-10 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
-    Have a project in mind or just want to say hello?  
-    I’d love to hear from you. Let’s create something amazing together.
-  </p>
-
-  <motion.button
-    whileHover={{ scale: 1.06 }}
-    whileTap={{ scale: 0.95 }}
-    className="inline-flex items-center justify-center bg-gradient-to-r from-accent to-accent-light 
-      px-7 sm:px-10 py-3.5 sm:py-4.5 rounded-xl 
-      font-medium text-base sm:text-lg text-white 
-      shadow-md hover:shadow-lg transition-all duration-300"
-  >
-    Start a Conversation
-  </motion.button>
-</motion.section>
-
-      </div>
-
-      {/* ---------------- FOOTER ---------------- */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="py-10 px-6 sm:px-8 md:px-12 border-t border-gray-800"  // 🔥 Increased padding to match sections
-      >
-        <div className="max-w-6xl mx-auto text-center text-text-muted text-sm max-sm:text-xs">
-          © Elara Vance 2025. All rights reserved.
-        </div>
-      </motion.footer>
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
     </div>
   );
 };
