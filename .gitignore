@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 node_modules/
 dist/
 build/
@@ -31,4 +31,3 @@ dist-ssr
 *.sln
 *.sw?
 .env
->>>>>>> a4084e00452dc66727786b7f875a41ff8bbfc7e0
