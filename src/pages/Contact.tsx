@@ -14,8 +14,10 @@ import RefineIcon from "../icons/contact/refine.svg";
 import DeliverIcon from "../icons/contact/deliver.svg";
 
 import SocialLinks from "../components/SocialLinks";
+
 import Footer from "../components/Footer";
 import BackToTop from "../components/BackToTop";
+import SpotlightCard from "../components/SpotlightCard";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -97,13 +99,7 @@ const Contact: React.FC = () => {
             {/* Contact Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20">
               {/* Contact Form */}
-              <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="md:col-span-2 bg-secondary/30 p-6 sm:p-8 rounded-2xl border border-gray-700/50 shadow-lg hover:shadow-accent/20 transition"
-              >
+              <SpotlightCard className="md:col-span-2 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-accent/20 transition">
                 <div className="flex items-center gap-3 mb-4 sm:mb-6">
                   <img
                     src={Message}
@@ -210,7 +206,7 @@ const Contact: React.FC = () => {
                     </span>
                   </div>
                 </form>
-              </motion.div>
+              </SpotlightCard>
 
               {/* Contact Info */}
               <div className="space-y-4 sm:space-y-6">
@@ -236,20 +232,21 @@ const Contact: React.FC = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ delay: info.delay, duration: 0.5 }}
-                    className="bg-secondary/30 p-5 sm:p-6 rounded-xl border border-gray-700/50 hover:shadow-md hover:shadow-accent/20 transition"
                   >
-                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                      <img
-                        src={info.icon}
-                        alt={info.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                      <h3 className="font-semibold text-sm sm:text-base">{info.title}</h3>
-                    </div>
-                    <p className="text-text-secondary text-sm sm:text-base">{info.text}</p>
-                    <p className="text-text-muted text-xs sm:text-sm">{info.sub}</p>
+                    <SpotlightCard>
+                      <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <img
+                          src={info.icon}
+                          alt={info.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                        />
+                        <h3 className="font-semibold text-sm sm:text-base">{info.title}</h3>
+                      </div>
+                      <p className="text-text-secondary text-sm sm:text-base">{info.text}</p>
+                      <p className="text-text-muted text-xs sm:text-sm">{info.sub}</p>
+                    </SpotlightCard>
                   </motion.div>
                 ))}
 
@@ -259,19 +256,20 @@ const Contact: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="bg-secondary/30 p-5 sm:p-6 rounded-xl border border-gray-700/50 hover:shadow-md hover:shadow-accent/20 transition"
                 >
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <img
-                      src={ConnectIcon}
-                      alt="Connect"
-                      loading="lazy"
-                      decoding="async"
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                    />
-                    <h3 className="font-semibold text-sm sm:text-base">Let's Connect</h3>
-                  </div>
-                  <SocialLinks />
+                  <SpotlightCard>
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                      <img
+                        src={ConnectIcon}
+                        alt="Connect"
+                        loading="lazy"
+                        decoding="async"
+                        className="w-4 h-4 sm:w-5 sm:h-5"
+                      />
+                      <h3 className="font-semibold text-sm sm:text-base">Let's Connect</h3>
+                    </div>
+                    <SocialLinks />
+                  </SpotlightCard>
                 </motion.div>
               </div>
             </div>
@@ -290,30 +288,33 @@ const Contact: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                 {faqs.map((faq, index) => (
-                  <motion.div
+                  <SpotlightCard
                     key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="bg-secondary/30 p-5 sm:p-6 rounded-xl border border-gray-700/50 shadow-sm hover:shadow-lg hover:shadow-accent/20 transition"
+                    className="rounded-xl shadow-sm hover:shadow-lg hover:shadow-accent/20 transition"
                   >
-                    <div className="flex items-start gap-3 sm:gap-4">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <img
-                          src={faq.icon}
-                          alt={faq.question}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-4 h-4 sm:w-5 sm:h-5"
-                        />
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                    >
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <img
+                            src={faq.icon}
+                            alt={faq.question}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-sm sm:text-base mb-2">{faq.question}</h3>
+                          <p className="text-text-secondary text-xs sm:text-sm">{faq.answer}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-sm sm:text-base mb-2">{faq.question}</h3>
-                        <p className="text-text-secondary text-xs sm:text-sm">{faq.answer}</p>
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </SpotlightCard>
                 ))}
               </div>
             </section>

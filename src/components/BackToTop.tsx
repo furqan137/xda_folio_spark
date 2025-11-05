@@ -1,208 +1,168 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, CSSProperties } from "react";
 import { ChevronUp, LifeBuoy } from "lucide-react";
 
-const BackToTop = () => {
-  const [visible, setVisible] = useState(false);
-  const [positionStyle, setPositionStyle] = useState<"fixed" | "absolute">("fixed");
-  const [absoluteTop, setAbsoluteTop] = useState<number | null>(null);
-  const [hasExtraPadding, setHasExtraPadding] = useState(true);
-  const [shouldAddSpacer, setShouldAddSpacer] = useState(false);
-  const buttonRef = useRef<HTMLDivElement | null>(null);
-  const locked = useRef(false);
+interface BackToTopProps {
+  inline?: boolean;
+}
 
-  // Layout constants in rem (no px conversions)
-  const DOCK_GAP_REM = 1.5625; // 25px
-  const LOCK_ZONE_REM = 6.25; // 100px
-  const MOBILE_FOOTER_OFFSET_REM = 6; // 50px
-  const DESKTOP_FOOTER_OFFSET_REM = 4.6875; // 75px
+const BackToTop: React.FC<BackToTopProps> = ({ inline = false }) => {
+  const [visible, setVisible] = useState(false);
+  const [isFixed, setIsFixed] = useState(false);
+  const [footerTop, setFooterTop] = useState<number | null>(null);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
+  const dockZoneRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let resizeTimeout: number | null = null;
-    let resizeInProgress = false;
+    if (inline) return;
 
-    const recalc = () => {
-      requestAnimationFrame(() => {
-        const footer = document.querySelector("footer");
-        const button = buttonRef.current;
-        if (!footer || !button) return;
+    const isProjectPage = window.location.pathname.startsWith("/works/");
+    const footer = isProjectPage
+      ? (document.querySelector("#project-nav") as HTMLElement | null)
+      : (document.querySelector("footer") as HTMLElement | null);
+    const dockZone = dockZoneRef.current;
 
-        const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const handleScroll = () => {
+      if (!footer || !dockZone) return;
 
-        // Detect short pages (handles Safari dynamic viewports & filtered content)
-        const scrollable = docHeight - viewportHeight;
-        const isShortPage =
-          scrollable < viewportHeight * 0.5 || // less than half viewport scrollable
-          docHeight <= viewportHeight + 100 || // page nearly fits viewport
-          docHeight <= viewportHeight * 1.1; // Safari viewport fallback
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      const scrollable = docHeight - viewportHeight;
 
-        if (isShortPage) {
-          setHasExtraPadding(false);
-          setShouldAddSpacer(false);
-          setPositionStyle("fixed");
-          setAbsoluteTop(null);
-          locked.current = false;
-          setVisible(false);
-          return;
+      const isMobile = window.innerWidth <= 768;
+      const DOCK_GAP_PX = isMobile ? 16 : 25;
+
+      // Determine if the page is short
+      const isShortPage = scrollable < viewportHeight * 0.5 || docHeight <= viewportHeight + 100;
+
+      if (isShortPage) {
+        if (visible) setVisible(false);
+      } else {
+        // Calculate scroll progress percentage
+        const scrollProgress = (scrollY / scrollable) * 100;
+
+        if (scrollProgress >= 60) {
+          if (!visible) setVisible(true);
         } else {
-          setHasExtraPadding(true);
+          if (visible) setVisible(false);
         }
+      }
 
-        const scrollY = window.scrollY;
-        const scrollProgress = (scrollY / (docHeight - viewportHeight)) * 100;
+      // Calculate footer top position relative to dockZone container
+      const footerRect = footer.getBoundingClientRect();
+      const dockZoneRect = dockZone.getBoundingClientRect();
+      const footerTopRelativeToDockZone = footerRect.top - dockZoneRect.top;
 
-        const TRIGGER_SHOW = window.innerWidth < 768 ? 65 : 60;
-        const TRIGGER_HIDE = window.innerWidth < 768 ? 62 : 57; // hysteresis buffer to avoid flicker
-
-        // Preserve previous visibility state to stabilize toggling
-        setVisible((prevVisible) => {
-          const showButton = prevVisible ? scrollProgress > TRIGGER_HIDE : scrollProgress > TRIGGER_SHOW;
-          setShouldAddSpacer(showButton);
-          return showButton;
-        });
-
-        const windowBottom = scrollY + viewportHeight;
-        const buttonHeight = button.offsetHeight;
-
-        // mobile vs desktop trigger math:
-        // goal: start docking a bit BEFORE the button would overlap footer.
-        // logic:
-        //   - desktop: use same behavior we already liked
-        //   - mobile: trigger *later* (closer to footer), not earlier.
-        //
-        // we define the "danger zone" as:
-        // footer top + LOCK_ZONE + half button height + DOCK_GAP
-        // so docking only starts once the bottom of the viewport has
-        // entered that zone.
-
-        // Adjust mobile docking trigger (restore padding offset)
-        const isMobile = window.innerWidth < 768;
-
-        // Distance from bottom where dock starts
-        const stickPoint = isMobile
-          ? docHeight -
-            (LOCK_ZONE_REM * 16 + // lock zone above footer
-              buttonHeight / 2 + // half button
-              DOCK_GAP_REM * 16 - // float gap
-              25 +
-              45) // small buffer + increased offset for mobile
-          : docHeight - (LOCK_ZONE_REM * 16 + DOCK_GAP_REM * 16 + buttonHeight / 2);
-
-        // Check if viewport bottom has crossed that stick point
-        const nearFooter = windowBottom >= stickPoint;
-
-        // Skip during resize to avoid flicker
-        if (resizeInProgress) return;
-
-        if (nearFooter && !locked.current) {
-          locked.current = true;
-          setPositionStyle("absolute");
-          setAbsoluteTop(
-            docHeight -
-              (LOCK_ZONE_REM +
-                buttonHeight / 16 +
-                (window.innerWidth < 768 ? MOBILE_FOOTER_OFFSET_REM : DESKTOP_FOOTER_OFFSET_REM)) *
-                16
-          );
-        } else if (!nearFooter && locked.current) {
-          locked.current = false;
-          setPositionStyle("fixed");
-          setAbsoluteTop(null);
+      // Determine if button should be fixed or absolute
+      if (isMobile) {
+        if (footerRect.top >= window.innerHeight - DOCK_GAP_PX * 0.5) {
+          if (!isFixed) setIsFixed(true);
+        } else {
+          if (isFixed) setIsFixed(false);
         }
-      });
+      } else {
+        if (footerRect.top >= window.innerHeight) {
+          if (!isFixed) setIsFixed(true);
+        } else {
+          if (isFixed) setIsFixed(false);
+        }
+      }
+
+      // Store footerTop for initial use
+      if (footerTop === null) {
+        setFooterTop(footerTopRelativeToDockZone);
+      }
     };
 
-    const debouncedRecalc = () => {
-      resizeInProgress = true;
-      if (resizeTimeout) clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(() => {
-        resizeInProgress = false;
-        requestAnimationFrame(() => {
-          recalc();
-          locked.current = false; // force re-check lock state
-          setPositionStyle("fixed");
-          setAbsoluteTop(null);
-        });
-      }, 150);
-    };
+    handleScroll();
 
-    const bodyObserver = new ResizeObserver(() => debouncedRecalc());
-    const footer = document.querySelector("footer");
-    const footerObserver = footer ? new ResizeObserver(() => debouncedRecalc()) : null;
-
-    bodyObserver.observe(document.body);
-    if (footer && footerObserver) footerObserver.observe(footer);
-
-    window.addEventListener("scroll", recalc, { passive: true });
-    window.addEventListener("resize", debouncedRecalc);
-
-    recalc();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
 
     return () => {
-      bodyObserver.disconnect();
-      footerObserver?.disconnect();
-      window.removeEventListener("scroll", recalc);
-      window.removeEventListener("resize", debouncedRecalc);
-      if (resizeTimeout) clearTimeout(resizeTimeout);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [visible, isFixed, footerTop, inline]);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const isMobile = window.innerWidth <= 768;
+  const DOCK_GAP_PX = isMobile ? 16 : 25;
+
+  const basePosition = isFixed ? "fixed" : "absolute";
+  const baseBottom = 0;
+  const baseLeft = "50%";
+  const baseTranslateX = "-50%";
+
+  const translateYOffset = isFixed ? DOCK_GAP_PX : DOCK_GAP_PX + 5;
+
+  // Use relative positioning container when absolute
+  const style: CSSProperties = inline
+    ? {
+        position: "relative",
+        margin: "2rem auto",
+        transform: "none",
+        opacity: 1,
+        pointerEvents: "auto",
+        width: "fit-content"
+      }
+    : {
+        position: basePosition,
+        bottom: baseBottom,
+        left: baseLeft,
+        transform: `translateX(${baseTranslateX}) translateY(-${translateYOffset}px)`,
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transition: "transform 0.3s ease, opacity 0.3s ease",
+        width: "fit-content"
+      };
 
   return (
     <>
       <div
-        ref={buttonRef}
-        className={`left-1/2 z-50 transition-opacity duration-300 ease ${
-          visible ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        style={{
-          position: positionStyle,
-          bottom: positionStyle === "fixed" ? `${DOCK_GAP_REM}rem` : "auto",
-          top: positionStyle === "absolute" && absoluteTop !== null ? absoluteTop : "auto",
-          left: "50%",
-          transform: `translateX(-50%) translateY(0px)`,
-          transition: "opacity 0.3s ease, transform 0.3s ease"
-        }}
+        className="relative"
+        ref={dockZoneRef}
+        id="dock-zone"
       >
-        {/* Background effect container */}
-        <div className="relative flex items-center gap-1">
-          {/* Blurred and shaded background shape */}
+        <div className="relative">
+          <div className="h-32" />
           <div
-            className={`absolute inset-0 rounded-[9999px] backdrop-blur-xl border border-white/10 bg-[#0f0f0f]/60 shadow-[0_0_25px_rgba(0,0,0,0.5)] transition-opacity duration-300 ease-in-out ${
-              visible ? "opacity-100" : "opacity-0"
-            }`}
-          ></div>
-
-          {/* Foreground content */}
-          <div className="relative flex items-center gap-1.5 px-1.5 py-1.5 z-10">
-            {/* Link hub icon button */}
-            <a
-              href="https://links.xzadik.com/nitinfiny"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit the NITTIN Link Hub"
-              className="flex items-center justify-center w-10 h-10 rounded-full text-white border-[3px] border-gray-600 hover:border-blue-400 hover:text-blue-400 transition-all duration-300"
+            ref={buttonRef}
+            className="bottom-[25px] left-1/2 z-50 transition-transform duration-300 ease-out"
+            style={style}
+          >
+            <div
+              className="relative inline-flex items-center z-10 rounded-full border border-white/10 bg-black/40 backdrop-blur-sm
+                         px-2 py-1 sm:px-2.5 sm:py-1.5 md:px-3 md:py-2
+                         gap-1.5 sm:gap-2"
             >
-              <LifeBuoy className="w-5 h-5 translate-y-[0.5px]" />
-            </a>
-
-            {/* Scroll to top button */}
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="flex items-center gap-2 px-4 py-1.5 rounded-[9999px] bg-secondary border border-transparent text-white text-sm font-medium transition-all duration-300 shadow-md hover:bg-accent hover:border-blue-400 hover:shadow-[0_0_12px_rgba(59,130,246,0.5)]"
-            >
-              <ChevronUp className="w-4 h-4" />
-              <span>To the top</span>
-            </button>
+              <a
+                href="https://links.xzadik.com/nitinfiny"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit the NITTIN Link Hub"
+                className="flex items-center justify-center shrink-0 rounded-full text-white border-[3px] border-zinc-500 hover:border-blue-400 hover:text-blue-400 transition-all duration-300
+                           w-10 h-10 sm:w-11 sm:h-11 md:w-11 md:h-11"
+              >
+                <LifeBuoy className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] md:w-[22px] md:h-[22px]" />
+              </a>
+              <button
+                onClick={scrollToTop}
+                className="flex items-center justify-center shrink-0 gap-1.5 sm:gap-2
+                           px-4 py-1.5 sm:px-5 sm:py-2 md:px-6 md:py-2.5
+                           rounded-full bg-zinc-800 border-[2px] border-zinc-700 text-white font-medium
+                           text-xs sm:text-[13px] md:text-sm whitespace-nowrap
+                           transition-all duration-300 hover:bg-zinc-700 hover:border-blue-400 hover:shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+              >
+                <ChevronUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4" />
+                <span>To the top</span>
+              </button>
+            </div>
           </div>
+          <div className="h-16" />
         </div>
       </div>
-      {/* Spacer to maintain bottom padding */}
-      {shouldAddSpacer && hasExtraPadding && (
-        <div
-          className="h-32 md:h-40"
-          style={{ transition: "none" }}
-        />
-      )}
     </>
   );
 };

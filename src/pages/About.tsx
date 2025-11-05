@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import BackToTop from "../components/BackToTop";
+import SpotlightCard from "../components/SpotlightCard";
 
 // Local icons
 import InspirationIcon from "../icons/about/inspire.svg";
@@ -170,26 +171,31 @@ const About = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.15 }}
-              className="bg-secondary/30 p-6 sm:p-8 rounded-xl border border-gray-700/50 max-w-sm mx-auto"
+              className="p-6 sm:p-8 max-w-sm mx-auto"
             >
-              <div className="flex items-center gap-3 sm:gap-4 mb-4">
-                <motion.img
-                  src={ProfileImage}
-                  alt="Aria Lane"
-                  loading="lazy"
-                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
-                <div>
-                  <h3 className="font-semibold text-sm sm:text-base">Nitinfiny</h3>
-                  <p className="text-text-muted text-xs sm:text-sm">Visual Artist & Designer</p>
+              <SpotlightCard
+                spotlightColor="rgba(99, 102, 241, 0.2)"
+                className="p-6 sm:p-8 max-w-sm mx-auto"
+              >
+                <div className="flex items-center gap-3 sm:gap-4 mb-4">
+                  <motion.img
+                    src={ProfileImage}
+                    alt="Aria Lane"
+                    loading="lazy"
+                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <div>
+                    <h3 className="font-semibold text-sm sm:text-base">Nitinfiny</h3>
+                    <p className="text-text-muted text-xs sm:text-sm">Visual Artist & Designer</p>
+                  </div>
                 </div>
-              </div>
-              <p className="text-text-secondary text-xs sm:text-sm">
-                Focused on motion, identity, and UI/UX. I design visuals that work — clear, consistent, and crafted with
-                intent.
-              </p>
+                <p className="text-text-secondary text-xs sm:text-sm">
+                  Focused on motion, identity, and UI/UX. I design visuals that work — clear, consistent, and crafted
+                  with intent.
+                </p>
+              </SpotlightCard>
             </motion.div>
           </div>
         </section>
@@ -261,26 +267,22 @@ const About = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
               {/* Left Values */}
               <div className="space-y-6 sm:space-y-8">
-                {values.map((value, index) => (
-                  <motion.div
+                {values.map((value) => (
+                  <div
                     key={value.title}
-                    variants={fadeInUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.15 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex gap-3 sm:gap-4 items-start"
+                    className="relative overflow-hidden transition-transform duration-300 flex gap-3 sm:gap-4 items-start p-4 sm:p-6"
                   >
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center shadow-inner shadow-accent/10 aspect-square ${value.color}`}
-                    >
-                      <img
-                        src={value.icon}
-                        alt={value.title}
-                        loading="lazy"
-                        className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
-                      />
+                    <motion.div whileHover={{ scale: 1.1 }}>
+                      <div
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center shadow-inner shadow-accent/10 aspect-square ${value.color}`}
+                      >
+                        <img
+                          src={value.icon}
+                          alt={value.title}
+                          loading="lazy"
+                          className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
+                        />
+                      </div>
                     </motion.div>
                     <div>
                       <h3
@@ -305,22 +307,17 @@ const About = () => {
                         {value.description}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
               {/* Right Stats */}
               <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                {stats.map((stat, index) => (
-                  <motion.div
+                {stats.map((stat) => (
+                  <SpotlightCard
                     key={stat.key}
-                    variants={scaleIn}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.15 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.03 }}
-                    className="bg-secondary/30 border border-gray-700/50 rounded-xl p-4 sm:p-6 text-center"
+                    spotlightColor="rgba(139, 92, 246, 0.15)"
+                    className="relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(139,92,246,0.25)] p-4 sm:p-6 text-center"
                   >
                     <div
                       className="text-2xl sm:text-3xl font-bold text-accent mb-1 sm:mb-2"
@@ -342,7 +339,7 @@ const About = () => {
                     >
                       {stat.label}
                     </p>
-                  </motion.div>
+                  </SpotlightCard>
                 ))}
               </div>
             </div>
@@ -355,32 +352,34 @@ const About = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="text-center py-14 sm:py-20 px-6 sm:px-10 bg-secondary/20 rounded-2xl border border-gray-700/50"
         >
-          <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold mb-5 sm:mb-6 leading-snug">
-            It's your time to shine.
-          </h2>
-
-          <p className="text-text-secondary mb-8 sm:mb-10 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
-            Have a project in mind or just want to say hello? I’d love to hear from you. Let’s create something amazing
-            together.
-          </p>
-
-          <motion.div
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block"
+          <SpotlightCard
+            spotlightColor="rgba(139, 92, 246, 0.15)"
+            className="relative overflow-hidden text-center py-14 sm:py-20 px-6 sm:px-10 bg-secondary/20 rounded-2xl border border-gray-700/50"
           >
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-accent to-accent-light
+            <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold mb-5 sm:mb-6 leading-snug">
+              It's your time to shine.
+            </h2>
+            <p className="text-text-secondary mb-8 sm:mb-10 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+              Have a project in mind or just want to say hello? I’d love to hear from you. Let’s create something
+              amazing together.
+            </p>
+            <motion.div
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-block"
+            >
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-accent to-accent-light
         px-7 sm:px-10 py-3.5 sm:py-4.5 rounded-xl
         font-medium text-base sm:text-lg text-white
         shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Start a Conversation
-            </Link>
-          </motion.div>
+              >
+                Start a Conversation
+              </Link>
+            </motion.div>
+          </SpotlightCard>
         </motion.section>
       </div>
 

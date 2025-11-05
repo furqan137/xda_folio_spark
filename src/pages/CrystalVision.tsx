@@ -3,9 +3,13 @@ import { motion, Variants } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Download } from "lucide-react";
 
-// Local MasonryGrid (animated)
+// Local components
 import MasonryGrid from "../components/MasonryGrid";
+import BackToTop from "../components/BackToTop";
+import Footer from "../components/Footer";
+import EmptyState from "../components/EmptyState";
 
+// Images
 import cube1 from "../images/cube1.png";
 import cube2 from "../images/cube2.png";
 import cube3 from "../images/cube3.png";
@@ -80,8 +84,8 @@ const CrystalVision: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0b0c10] text-white min-h-screen pt-36 sm:pt-48 md:pt-56 pb-12 sm:pb-16">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-12 relative">
+    <div className="bg-[#0b0c10] text-white min-h-screen flex flex-col">
+      <div className="flex-grow max-w-7xl mx-auto px-6 sm:px-8 md:px-12 pt-36 sm:pt-48 md:pt-56">
         {/* ---------- HERO ---------- */}
         <header className="flex flex-col md:flex-row justify-between items-start mb-16 md:mb-20">
           <motion.div
@@ -176,81 +180,99 @@ const CrystalVision: React.FC = () => {
           transition={{ duration: 0.4 }}
         >
           {activeTab === "Logo Concepts" ? (
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="mb-16"
-            >
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-3">Logo Explorations</h2>
-                <p className="text-gray-400 max-w-2xl mx-auto text-base">
-                  Distinct crystalline approaches exploring light, form, and
-                  dimensional depth.
-                </p>
-              </div>
+            logoImages.length > 0 ? (
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="mb-16"
+              >
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold mb-3">Logo Explorations</h2>
+                  <p className="text-gray-400 max-w-2xl mx-auto text-base">
+                    Distinct crystalline approaches exploring light, form, and
+                    dimensional depth.
+                  </p>
+                </div>
 
-              {/* ✅ Animated Masonry Grid */}
-              <MasonryGrid defaultColumns={3} tabletColumns={2} mobileColumns={1} gap={20}>
-                {logoImages.map((logo, idx) => (
-                  <motion.div
-                    key={idx}
-                    layout
-                    whileHover={{ scale: 1.04, zIndex: 10 }}
-                    transition={{ type: "spring", stiffness: 250, damping: 25 }}
-                    className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg bg-[#111]"
-                    onMouseEnter={() => setHoveredImage(idx)}
-                    onMouseLeave={() => setHoveredImage(null)}
-                  >
-                    <motion.img
-                      src={logo.src}
-                      alt={logo.title}
-                      className="w-full h-auto object-contain"
-                      initial={{ opacity: 0.8 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-
-                    {hoveredImage === idx && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
+                {/* Masonry Grid */}
+                <MasonryGrid
+                  defaultColumns={3}
+                  tabletColumns={2}
+                  mobileColumns={1}
+                  gap={20}
+                >
+                  {logoImages.map((logo, idx) => (
+                    <motion.div
+                      key={idx}
+                      layout
+                      whileHover={{ scale: 1.04, zIndex: 10 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 250,
+                        damping: 25,
+                      }}
+                      className="relative group cursor-pointer rounded-xl overflow-hidden shadow-lg bg-[#111]"
+                      onMouseEnter={() => setHoveredImage(idx)}
+                      onMouseLeave={() => setHoveredImage(null)}
+                    >
+                      <motion.img
+                        src={logo.src}
+                        alt={logo.title}
+                        className="w-full h-auto object-contain"
+                        initial={{ opacity: 0.8 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4"
-                      >
-                        <h3 className="text-lg font-bold text-white mb-1">
-                          {logo.title}
-                        </h3>
-                        <p className="text-gray-200 text-sm mb-3">
-                          {logo.desc}
-                        </p>
-                        <button
-                          onClick={() => handleDownload(logo.src, logo.fileName)}
-                          className="bg-accent hover:bg-accent-light px-3 py-2 rounded-lg font-medium flex items-center gap-2 text-sm w-fit"
+                        transition={{ duration: 0.5 }}
+                      />
+
+                      {hoveredImage === idx && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute inset-0 bg-black/60 flex flex-col justify-end p-4"
                         >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
-                      </motion.div>
-                    )}
-                  </motion.div>
-                ))}
-              </MasonryGrid>
-            </motion.div>
+                          <h3 className="text-lg font-bold text-white mb-1">
+                            {logo.title}
+                          </h3>
+                          <p className="text-gray-200 text-sm mb-3">
+                            {logo.desc}
+                          </p>
+                          <button
+                            onClick={() =>
+                              handleDownload(logo.src, logo.fileName)
+                            }
+                            className="bg-accent hover:bg-accent-light px-3 py-2 rounded-lg font-medium flex items-center gap-2 text-sm w-fit"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download
+                          </button>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </MasonryGrid>
+              </motion.div>
+            ) : (
+              <div className="mb-32">
+                {" "}
+                {/* Added bottom margin so empty state is not too close to footer */}
+                <EmptyState
+                  title="No Logo Concepts Yet"
+                  description="We are still working on the logo explorations. Please check back soon!"
+                />
+              </div>
+            )
           ) : (
-            <motion.div
-              layout
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center justify-center text-center text-gray-500 min-h-[50vh]"
-            >
-              <p className="text-lg font-medium mb-2">Nothing here yet</p>
-              <p className="text-sm text-gray-600">
-                Content will appear once this section is ready.
-              </p>
-            </motion.div>
+            <div className="mb-32">
+              {" "}
+              {/* Added margin for other empty tabs */}
+              <EmptyState
+                title={`No content in ${activeTab}`}
+                description="Content will appear once this section is ready."
+              />
+            </div>
           )}
         </motion.div>
 
@@ -286,57 +308,58 @@ const CrystalVision: React.FC = () => {
               </div>
             ))}
           </div>
-
           <div className="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-purple-500/40 via-pink-400/30 to-transparent blur-2xl pointer-events-none" />
         </motion.div>
 
-        {/* ---------- FOOTER NAV ---------- */}
+        {/* ---------- BACK TO TOP ---------- */}
+        <BackToTop />
+        {/* ---------- PROJECT NAVIGATION ---------- */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex justify-between items-center text-sm"
+          className="relative flex items-center mt-8 mb-8 text-text-secondary text-sm sm:text-base w-full"
         >
+          {/* Previous Button - Full Left */}
           <Link
-            to="/crystalvision"
+            to="/previous-project"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2 text-text-secondary hover:text-blue-400 transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 hover:text-blue-400 transition-colors absolute left-0"
           >
-            <ArrowLeft className="w-4 h-4" /> Previous
+            <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
+            Previous
           </Link>
 
-          <div className="text-center">
-            <p className="text-text-muted text-sm">Project 2 of 12</p>
+          {/* Center Text */}
+          <div className="absolute left-1/2 -translate-x-1/2 text-center">
+            <p className="text-text-muted text-xs sm:text-sm mb-0.5">
+              Project 2 of 12
+            </p>
             <Link
               to="/works"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="text-text-secondary hover:text-blue-400 transition-colors"
+              className="inline-flex items-baseline gap-1 hover:text-blue-400 transition-colors"
             >
-              ← Back to Works
+              <ArrowLeft className="relative top-[2px] w-3 h-3" />
+              Back to Works
             </Link>
           </div>
 
+          {/* Next Button - Full Right */}
           <Link
-            to="/crystalvision"
+            to="/next-project"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2 text-text-secondary hover:text-blue-400 transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 hover:text-blue-400 transition-colors absolute right-0"
           >
-            Next <ArrowRight className="w-4 h-4" />
+            Next
+            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </Link>
         </motion.div>
-
-        {/* ---------- FOOTER ---------- */}
-        <motion.footer
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="py-10 border-t border-gray-800 text-center text-text-muted text-sm"
-        >
-          © NITTIN 2016–{new Date().getFullYear()}. All rights reserved.
-        </motion.footer>
       </div>
+
+      {/* ---------- CLIENT FOOTER COMPONENT ---------- */}
+      <Footer />
     </div>
   );
 };

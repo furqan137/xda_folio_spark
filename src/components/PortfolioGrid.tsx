@@ -1,12 +1,13 @@
 import React from "react";
 import { motion, easeOut } from "framer-motion";
 import { Link } from "react-router-dom";
+import EmptyState from "./EmptyState";
+
 import {
   worksProjects,
   pastWorksProjects,
   playgroundProjects,
 } from "../data/projects";
-import EmptyState from "./EmptyState";
 
 interface PortfolioGridProps {
   type?: "works" | "pastworks" | "playground"; // source type
@@ -58,7 +59,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
   if (!items || items.length === 0) {
     return (
       <div className="w-full flex justify-center items-center py-20">
-        <EmptyState />
+        <EmptyState reason="No projects found." />
       </div>
     );
   }
@@ -70,7 +71,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
       variants={gridVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.05, margin: '0px 0px -10% 0px' }}
+      viewport={{ once: true, amount: 0.05, margin: "0px 0px -10% 0px" }}
     >
       {items.slice(0, limit).map((project) => (
         <motion.article
@@ -94,31 +95,22 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({
                 loading="lazy"
                 className="w-full h-full object-cover transform group-hover:scale-110"
                 style={{
-                  transition:
-                    "transform 700ms cubic-bezier(0.22,1,0.36,1) 420ms",
+                  transition: "transform 700ms cubic-bezier(0.22,1,0.36,1) 420ms",
                 }}
               />
             </div>
 
-            {/* Title + Description */}
+            {/* Title + View Project */}
             <div className="p-5 sm:p-6 md:p-8">
               <h3 className="font-semibold text-text-secondary text-base sm:text-lg md:text-xl mb-2">
                 {project.title}
               </h3>
-
-              {(project.description || project.subtitle) && (
-                <p
-                  className="text-text-secondary text-xs sm:text-sm transition-colors duration-300"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  <span
-                    className="group-hover:text-[color:var(--accent)]"
-                    style={{ "--accent": accent } as React.CSSProperties}
-                  >
-                    {project.description || project.subtitle}
-                  </span>
-                </p>
-              )}
+              <p
+                className="text-text-secondary text-xs sm:text-sm group-hover:text-[color:var(--accent)] transition-colors duration-300"
+                style={{ "--accent": accent } as React.CSSProperties}
+              >
+                {project.description || project.subtitle || "View Project"}
+              </p>
             </div>
           </Link>
         </motion.article>

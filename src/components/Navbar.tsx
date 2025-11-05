@@ -3,24 +3,43 @@ import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../images/logo.svg";
+import StarBorder from "./StarBorder";
 
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isShrunk, setIsShrunk] = useState(false);
+  const [isTransparent, setIsTransparent] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(false);
+    const timeout = setTimeout(() => setReady(true), 150);
+    return () => clearTimeout(timeout);
+  }, [location.pathname]);
 
-  // Detect scroll position
+  // Combined effect for scroll shrink and transparency
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsShrunk(true);
+      const scrolled = window.scrollY > 50;
+      setIsShrunk(scrolled);
+
+      // If the menu is open, force frosty nav and preserve shrunken height
+      if (isOpen) {
+        setIsTransparent(false);
+        return;
+      }
+
+      if (location.pathname === "/" || location.pathname === "/home") {
+        setIsTransparent(!scrolled);
       } else {
-        setIsShrunk(false);
+        setIsTransparent(false);
       }
     };
-    window.addEventListener("scroll", handleScroll);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname, isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,6 +55,20 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
+  // 🔧 Close menu immediately on ANY window resize (width or height)
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        setIsOpen(false);
+        document.body.style.overflow = "";
+        document.body.style.touchAction = "";
+      }
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isOpen]);
+
   const navItems = [
     { name: "Home", path: "/home" },
     { name: "Works", path: "/works" },
@@ -48,15 +81,19 @@ const Navbar = () => {
       <header
         className={`w-full z-[60] fixed top-0 left-0 right-0
   transition-[padding,background-color,backdrop-filter,border-color,box-shadow]
-  duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+  duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]
   ${
-    isShrunk
-      ? "backdrop-blur-xl bg-background/80 border-b border-white/10 shadow-sm py-1"
-      : isOpen
-      ? "backdrop-blur-xl bg-background/80 border-b border-white/10 shadow-sm py-2 md:py-3"
-      : "bg-background/95 py-2 md:py-3 border-b border-transparent"
+    ready
+      ? isOpen
+        ? "backdrop-blur-xl bg-background/80 border-b border-white/10 shadow-sm py-[0.3rem] md:py-2"
+        : isTransparent
+        ? "bg-transparent backdrop-blur-0 border-transparent shadow-none py-[0.6rem] md:py-3"
+        : isShrunk
+        ? "backdrop-blur-xl bg-background/80 border-b border-white/10 shadow-sm py-[0.3rem] md:py-1"
+        : "bg-background/95 py-[0.6rem] md:py-2 border-b border-transparent"
+      : "bg-transparent backdrop-blur-0 border-transparent shadow-none py-[0.6rem] md:py-3"
   }`}
-        style={{ willChange: "backdrop-filter, border-color, background-color" }}
+        style={{ willChange: "backdrop-filter, border-color, background-color, transform, opacity" }}
       >
         {/* Navbar */}
         <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 md:px-10 transition-all duration-300">
@@ -117,22 +154,26 @@ const Navbar = () => {
             transition={{ duration: 0.4 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`${
+            className={`hidden md:block ${
               isShrunk ? "-translate-x-3 md:-translate-x-6 translate-y-[2px]" : "translate-x-0 translate-y-0"
-            } transform-gpu transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]`}
+            }
+      transform-gpu transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] relative group`}
           >
-            <Link
-              to="/contact"
-              className="hidden md:block bg-transparent text-text-secondary px-6 py-2 rounded-lg text-sm font-medium shadow-md
-                         border-2 border-text-secondary/40 hover:border-[#22d3ee]/60
-                         hover:text-white hover:bg-accent/80
-                         hover:shadow-[0_0_10px_rgba(34,211,238,0.4)]
-                         hover:scale-105 transition-all duration-300 relative overflow-hidden
-                         before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-[#22d3ee]/0
-                         before:transition-all before:duration-500 before:blur-sm before:opacity-0
-                         hover:before:opacity-100 hover:before:border-[#22d3ee]/50 hover:before:blur-md"
-            >
-              CONTACT
+            <div
+              className="absolute inset-0 rounded-[20px] opacity-0 group-hover:opacity-100 transition-all duration-500 blur-[20px] pointer-events-none"
+              style={{
+                background: "rgba(34,211,238,0.25)",
+                boxShadow:
+                  "0 0 4px 1px rgba(34,211,238,0.3), 0 0 12px 3px rgba(34,211,238,0.25), 0 0 20px 6px rgba(34,211,238,0.1)"
+              }}
+            />
+            <Link to="/contact">
+              <StarBorder
+                as="button"
+                className="px-6 py-2 text-sm font-semibold rounded-lg transition-all duration-300 border border-cyan-400/40 group-hover:border-cyan-400/80"
+              >
+                CONTACT
+              </StarBorder>
             </Link>
           </motion.div>
 
@@ -162,7 +203,7 @@ const Navbar = () => {
           {isOpen && (
             <div
               className={`fixed inset-0 z-[40] flex items-start justify-center ${
-                isShrunk ? "pt-[3.8rem]" : "pt-[5.5rem]"
+                isShrunk ? "pt-[4rem]" : "pt-[5rem]"
               } md:pt-[7rem] bg-transparent`}
               onClick={() => setIsOpen(false)}
             >
@@ -211,24 +252,18 @@ const Navbar = () => {
                       duration: 0.3
                     }}
                   >
-                    <Link
+                    <StarBorder
+                      as={Link}
                       to="/contact"
                       onClick={() => {
                         setIsOpen(false);
                         document.body.style.overflow = "";
                         document.body.style.touchAction = "";
                       }}
-                      className="block bg-transparent text-text-secondary px-6 py-2 rounded-lg text-sm font-medium shadow-md
-                                 border-2 border-text-secondary/40 hover:border-[#22d3ee]/60
-                                 hover:text-white hover:bg-accent/80
-                                 hover:shadow-[0_0_10px_rgba(34,211,238,0.4)]
-                                 hover:scale-105 transition-all duration-300 relative overflow-hidden
-                                 before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-[#22d3ee]/0
-                                 before:transition-all before:duration-500 before:blur-sm before:opacity-0
-                                 hover:before:opacity-100 hover:before:border-[#22d3ee]/50 hover:before:blur-md text-center w-full"
+                      className="w-full text-center text-sm font-semibold transition-all duration-300 hover:shadow-[0_0_4px_1px_#22d3ee,0_0_12px_3px_rgba(34,211,238,0.25),0_0_20px_6px_rgba(34,211,238,0.1)]"
                     >
                       CONTACT
-                    </Link>
+                    </StarBorder>
                   </motion.div>
                 </motion.div>
               </motion.div>
