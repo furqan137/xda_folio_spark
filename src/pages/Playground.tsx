@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { motion, Variants } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 import Footer from "../components/Footer";
 import BackToTop from "../components/BackToTop";
@@ -18,11 +18,11 @@ import Weird3DIcon from "../icons/playgrounds/3d.svg";
 import TypeIcon from "../icons/playgrounds/type.svg";
 import ChaosIcon from "../icons/playgrounds/chaos.svg";
 
-// ---- Easing ----
+// === Easings ===
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const EASE_SMOOTH: [number, number, number, number] = [0.4, 0, 0.2, 1];
 
-// ---- Animations ----
+// === Animations ===
 const fadePage: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.5, ease: EASE_OUT } },
@@ -41,23 +41,15 @@ const parentStagger: Variants = {
 const Playground = (): JSX.Element => {
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [activeFilter, setActiveFilter] = useState<string>("all");
-  const [filterLock, setFilterLock] = useState(false);
 
-  const handleFilterChange = (filterId: string) => {
-    if (filterLock) return;
-    setFilterLock(true);
-    setActiveFilter(filterId);
-    setTimeout(() => setFilterLock(false), 700);
-  };
-
-  // === Categories ===
+  // === Category Buttons ===
   const categories = [
     { id: "experimental", label: "Experimental", icon: ExperimentalIcon, color: "bg-pink-600" },
     { id: "unconventional", label: "Unconventional", icon: UnconventionalIcon, color: "bg-purple-600" },
     { id: "weird", label: "Weird", icon: WeirdIcon, color: "bg-green-600" },
   ];
 
-  // === Filters ===
+  // === Filter Buttons ===
   const filters = [
     { id: "all", label: "All", icon: AllIcon },
     { id: "glitch", label: "Glitch Art", icon: GlitchIcon },
@@ -66,12 +58,19 @@ const Playground = (): JSX.Element => {
     { id: "chaos", label: "Abstract Chaos", icon: ChaosIcon },
   ];
 
-  // === Filtered projects ===
-  const filteredProjects = playgroundProjects.filter((p) => {
-    const matchCat = !activeCategory || p.category === activeCategory;
-    const matchFilter = activeFilter === "all" || p.tags?.includes(activeFilter);
-    return matchCat && matchFilter;
-  });
+  // === FIXED FILTER FUNCTION ===
+  const filteredProjects = useMemo(() => {
+    return playgroundProjects.filter((p) => {
+      const matchCategory = !activeCategory || p.category === activeCategory;
+      const matchFilter = activeFilter === "all" || p.tags?.includes(activeFilter);
+      return matchCategory && matchFilter;
+    });
+  }, [activeCategory, activeFilter]);
+
+  // === Handle Filter Changes Safely ===
+  const handleFilterChange = (filterId: string) => {
+    setActiveFilter((prev) => (prev === filterId ? "all" : filterId));
+  };
 
   return (
     <motion.div
@@ -102,10 +101,7 @@ const Playground = (): JSX.Element => {
               Playground
             </motion.p>
 
-            <motion.h1
-              variants={fadeUp}
-              className="font-mono text-3xl sm:text-4xl md:text-6xl font-bold mb-5 sm:mb-7"
-            >
+            <motion.h1 variants={fadeUp} className="font-mono text-3xl sm:text-4xl md:text-6xl font-bold mb-5 sm:mb-7">
               Creative Playground
             </motion.h1>
 
@@ -131,19 +127,14 @@ const Playground = (): JSX.Element => {
             initial="hidden"
             animate="visible"
           >
-            {categories.map((cat, i) => {
+            {categories.map((cat) => {
               const active = activeCategory === cat.id;
               return (
                 <motion.button
                   key={cat.id}
-                  onClick={() => {
-                    if (activeCategory === cat.id) {
-                      setActiveCategory("");
-                    } else {
-                      setActiveCategory(cat.id);
-                      setActiveFilter("all");
-                    }
-                  }}
+                  onClick={() =>
+                    setActiveCategory((prev) => (prev === cat.id ? "" : cat.id))
+                  }
                   className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] sm:text-xs md:text-sm transition-all ${
                     active
                       ? `${cat.color} border-accent text-white shadow-md`
@@ -174,13 +165,12 @@ const Playground = (): JSX.Element => {
             initial="hidden"
             animate="visible"
           >
-            {filters.map((f, i) => {
+            {filters.map((f) => {
               const active = activeFilter === f.id;
               return (
                 <motion.button
                   key={f.id}
-                  onClick={() => handleFilterChange(active ? "all" : f.id)}
-                  disabled={filterLock}
+                  onClick={() => handleFilterChange(f.id)}
                   className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] sm:text-xs md:text-sm transition-all ${
                     active
                       ? "bg-accent border-accent text-white shadow-md shadow-accent/40"
@@ -206,19 +196,36 @@ const Playground = (): JSX.Element => {
             })}
           </motion.div>
 
-          {/* === REUSABLE GRID === */}
-          {filteredProjects.length > 0 ? (
-            <PortfolioGrid
-              type="playground"
-              projects={filteredProjects}
-              limit={filteredProjects.length}
-              accent="#22d3ee"
-            />
-          ) : (
-            <div className="flex justify-center py-20 sm:py-28">
-              <EmptyState reason="No projects match your selected filters." />
-            </div>
-          )}
+          {/* === FIXED GRID (AnimatePresence ensures refresh works properly) === */}
+          <AnimatePresence mode="wait">
+            {filteredProjects.length > 0 ? (
+              <motion.div
+                key={activeCategory + activeFilter}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: EASE_SMOOTH }}
+              >
+                <PortfolioGrid
+                  type="playground"
+                  projects={filteredProjects}
+                  limit={filteredProjects.length}
+                  accent="#22d3ee"
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex justify-center py-20 sm:py-28"
+              >
+                <EmptyState reason="No projects match your selected filters." />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
 

@@ -1,13 +1,28 @@
 export interface Project {
   id: number;
   title: string;
-  subtitle?: string;
-  description?: string;
   category: string;
   image: string;
-  link?: string;
-  tags?: string[];
+  link: string;
+  description?: string;
+  subtitle?: string;
+  client?: string;
+  services?: string;
+  duration?: string;
+  year?: string;
+  tabs?: {
+    label: string;
+    heading?: string;
+    description?: string;
+    images?: {
+      src: string;
+      title?: string;
+      desc?: string;
+      download?: string;
+    }[];
+  }[];
 }
+
 
 export interface Skill {
   name: string;
